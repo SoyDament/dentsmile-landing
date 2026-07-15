@@ -8,8 +8,10 @@ import { routing } from './libs/I18nRouting';
 
 const handleI18nRouting = createMiddleware(routing);
 
+// eslint-disable-next-line @typescript-eslint/no-deprecated
 const isProtectedRoute = createRouteMatcher(['/dashboard(.*)', '/:locale/dashboard(.*)']);
 
+// eslint-disable-next-line @typescript-eslint/no-deprecated
 const isAuthPage = createRouteMatcher([
   '/sign-in(.*)',
   '/:locale/sign-in(.*)',
@@ -48,6 +50,7 @@ export default async function proxy(request: NextRequest, event: NextFetchEvent)
     // oxlint-disable-next-line typescript/return-await
     return clerkMiddleware(async (auth, req) => {
       if (isProtectedRoute(req)) {
+        // eslint-disable-next-line prefer-named-capture-group
         const locale = req.nextUrl.pathname.match(/(\/.*)\/dashboard/u)?.at(1) ?? '';
 
         const signInUrl = new URL(`${locale}/sign-in`, req.url);

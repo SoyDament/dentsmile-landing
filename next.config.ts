@@ -18,6 +18,23 @@ const baseConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/': ['./migrations/**/*'],
   },
+  webpack: (config, { isServer: _isServer }) => {
+    // Enable asyncWebAssembly to resolve Arcjet's compiled .wasm security modules
+    config.experiments = {
+      ...config.experiments,
+      asyncWebAssembly: true,
+      layers: true,
+    };
+
+    // Ensure .wasm files are treated as async WebAssembly modules
+    config.module.rules.push({
+      test: /\.wasm$/u,
+      type: 'webassembly/async',
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return config;
+  },
 };
 
 // Initialize the Next-Intl plugin
